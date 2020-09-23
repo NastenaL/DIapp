@@ -11,15 +11,14 @@
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTimeService();
+            services.AddTransient<IMessageSender, EmailMessageSender>();
         }
 
-        public void Configure(IApplicationBuilder app, TimeService timeService)
+        public void Configure(IApplicationBuilder app, IMessageSender sender)
         {
             app.Run(async (context) =>
             {
-                context.Response.ContentType = "text/html; sharset=utf-8";
-                await context.Response.WriteAsync($"Current time is {timeService?.GetTime()}");
+                await context.Response.WriteAsync(sender.Send());
             });
         }
     }
