@@ -19,7 +19,7 @@
         {
             app.Run(async (context) =>
             {
-                IMessageSender messageSender = context.RequestServices.GetService<IMessageSender>();
+                IMessageSender messageSender = app.ApplicationServices.GetService<IMessageSender>();
                 context.Response.ContentType = "text/html;charset=utf-8";
                 await context.Response.WriteAsync(messageSender.Send());
             });
