@@ -11,7 +11,7 @@
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<TimeService>();
+            services.AddTimeService();
         }
 
         public void Configure(IApplicationBuilder app, TimeService timeService)
