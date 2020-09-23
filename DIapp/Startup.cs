@@ -11,13 +11,14 @@
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IMessageSender, EmailMessageSender>();
+            services.AddTransient<ICounter, RandomCounter>();
+            services.AddTransient<CounterService>();
           
         }
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseMiddleware<MessageMiddleware>();
+            app.UseMiddleware<CounterMiddleware>();
         }
     }
 }
