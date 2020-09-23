@@ -11,8 +11,8 @@
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<ICounter, RandomCounter>();
-            services.AddTransient<CounterService>();
+            services.AddScoped<ICounter, RandomCounter>();
+            services.AddScoped<CounterService>();
           
         }
 
