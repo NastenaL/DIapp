@@ -12,14 +12,16 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IMessageSender, EmailMessageSender>();
-            services.AddTransient<MessageService>();
+          
         }
 
-        public void Configure(IApplicationBuilder app, MessageService sender)
+        public void Configure(IApplicationBuilder app)
         {
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync(sender.Send());
+                IMessageSender messageSender = context.RequestServices.GetService<IMessageSender>();
+                context.Response.ContentType = "text/html;charset=utf-8";
+                await context.Response.WriteAsync(messageSender.Send());
             });
         }
     }
