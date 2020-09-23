@@ -1,7 +1,7 @@
 ﻿namespace DIapp
 {
-    using System.Linq;
     using System.Text;
+    using DIapp.Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -9,30 +9,21 @@
 
     public class Startup
     {
-        private IServiceCollection _services;
         public void ConfigureServices(IServiceCollection services)
         {
-            _services = services;
+            services.AddTransient<IMessageSender, EmailMessageSender>();
         }
-        public void Configure(IApplicationBuilder app)
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IMessageSender messageSender)
         {
-            app.Run(async context =>
+           if(env.IsDevelopment())
             {
-                var sb = new StringBuilder();
-                sb.Append("<h1>Все сервисы</h1>");
-                sb.Append("<table>");
-                sb.Append("<tr><th>Тип</th><th>Lifetime</th><th>Реализация</th></tr>");
-                foreach (var svc in _services)
-                {
-                    sb.Append("<tr>");
-                    sb.Append($"<td>{svc.ServiceType.FullName}</td>");
-                    sb.Append($"<td>{svc.Lifetime}</td>");
-                    sb.Append($"<td>{svc.ImplementationType?.FullName}</td>");
-                    sb.Append("</tr>");
-                }
-                sb.Append("</table>");
-                context.Response.ContentType = "text/html;charset=utf-8";
-                await context.Response.WriteAsync(sb.ToString());
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync(messageSender.Send());
             });
         }
     }
