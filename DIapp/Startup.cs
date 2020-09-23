@@ -12,9 +12,10 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IMessageSender, EmailMessageSender>();
+            services.AddTransient<MessageService>();
         }
 
-        public void Configure(IApplicationBuilder app, IMessageSender sender)
+        public void Configure(IApplicationBuilder app, MessageService sender)
         {
             app.Run(async (context) =>
             {
